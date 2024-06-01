@@ -1,3 +1,4 @@
+import 'package:contact_list_assignment/views/widgets/app_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -20,39 +21,21 @@ class FormLayout extends StatelessWidget {
       key: formKey,
       child: Column(
         children: [
-          TextFormField(
+          AppTextField(
             controller: nameTEController,
-            keyboardType: TextInputType.name,
-            smartDashesType: SmartDashesType.enabled,
-            decoration: const InputDecoration(
-              suffixIcon: Icon(Icons.text_snippet),
-              hintText: nameTextFieldHint,
-            ),
-            validator: (value){
-              if(value!.isEmpty){
-                return nameTextFieldError;
-              }
-              return null;
-            },
-            autovalidateMode: AutovalidateMode.onUserInteraction,
+            hintText: nameTextFieldHint,
+            errorText: nameTextFieldError,
+            suffixIcon: Icons.drive_file_rename_outline,
+            textInputType: TextInputType.name,
           ),
           const Gap(10),
-          TextFormField(
+          AppTextField(
             controller: phoneNumberTEController,
-            keyboardType: TextInputType.number,
-            smartDashesType: SmartDashesType.enabled,
+            hintText: phoneNumberTextFieldHint,
+            errorText: phoneNumberTextFieldError,
+            suffixIcon: Icons.phone,
+            textInputType: TextInputType.number,
             maxLength: 11,
-            decoration: const InputDecoration(
-              suffixIcon: Icon(Icons.phone),
-              hintText: phoneNumberTextFieldHint,
-            ),
-            validator: (value){
-              if(value!.isEmpty){
-                return phoneNumberTextFieldError;
-              }
-              return null;
-            },
-            autovalidateMode: AutovalidateMode.onUserInteraction,
           ),
         ],
       ),

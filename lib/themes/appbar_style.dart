@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 class AppbarStyle {
   static AppBarTheme getAppBarTheme() => const AppBarTheme(
-      toolbarHeight: 80,
       backgroundColor: appPrimaryColor,
       foregroundColor: whiteColor,
       titleTextStyle: TextStyle(fontSize: 22, fontWeight: FontWeight.bold));

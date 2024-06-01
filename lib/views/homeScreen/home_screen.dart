@@ -1,9 +1,10 @@
-import 'package:contact_list_assignment/utils/colors.dart';
+import 'package:contact_list_assignment/providers/contact_list_provider.dart';
 import 'package:contact_list_assignment/views/homeScreen/form_layout.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:contact_list_assignment/views/widgets/app_alert_dialog.dart';
+import 'package:contact_list_assignment/views/widgets/contact_list.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-
+import 'package:provider/provider.dart';
 import '../../utils/strings.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -14,15 +15,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late TextEditingController _nameTEController;
-  late TextEditingController _phoneNumberTEController;
-  late GlobalKey<FormState> _formKey;
+  late final TextEditingController _nameTEController;
+  late final TextEditingController _phoneNumberTEController;
+  late final GlobalKey<FormState> _formKey;
+  late final ContactListProvider _contactListProvider;
 
   @override
   void initState() {
     _nameTEController = TextEditingController();
     _phoneNumberTEController = TextEditingController();
     _formKey = GlobalKey<FormState>();
+    _contactListProvider =
+        Provider.of<ContactListProvider>(context, listen: false);
     super.initState();
   }
 
@@ -48,34 +52,33 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: MediaQuery.of(context).size.width * 0.9,
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      _contactListProvider.saveContactInformation(
+                        _nameTEController.text,
+                        _phoneNumberTEController.text,
+                      );
+                      _nameTEController.clear();
+                      _phoneNumberTEController.clear();
+                    }
+                  },
                   child: const Text(contactAddButtonText),
                 ),
               ),
               const Gap(50),
-              ListView.separated(
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return Material(
-                    color: whiteColor,
-                    child: ListTile(
-                      title: Text("Tonmoy"),
-                      leading: Icon(Icons.person,size: 30,color: appPrimaryColor,),
-                      subtitle: Text("01906729575"),
-                      trailing: Icon(Icons.phone,color: Colors.blue,size: 25,),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      tileColor: greyColor,
+              ContactList(
+                onTileTap: (int index) {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AppAlertDialog(
+                      title: alertDialogTitle,
+                      content: alertDialogContent,
+                      deleteItem: () {
+                        _contactListProvider.deleteContactInformation(index);
+                      },
                     ),
                   );
                 },
-                separatorBuilder: (context, index) {
-                  return const Divider(
-                    height: 10,
-                  );
-                },
-                itemCount: 3,
               ),
             ],
           ),
@@ -88,6 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     _nameTEController.dispose();
     _phoneNumberTEController.dispose();
+    _contactListProvider.dispose();
     super.dispose();
   }
 }
