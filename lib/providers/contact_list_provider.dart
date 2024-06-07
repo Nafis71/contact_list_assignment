@@ -5,7 +5,7 @@ import 'package:contact_list_assignment/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class ContactListProvider extends ChangeNotifier {
-  List<ContactModel> _contactList = [];
+  final List<ContactModel> _contactList = [];
 
   void saveContactInformation(String contactName, String contactNumber) {
     Random random = Random();
